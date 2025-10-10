@@ -27,9 +27,9 @@ Output Format:
         - is_buyer_maker: True if sell aggressor, False if buy aggressor
 
 Use Case:
-    Hawkes process modeling of trade arrival dynamics
+    Week 9 of Phase 2 - Hawkes process modeling of trade arrival dynamics
 
-Author: Rylan Spence
+Author: HFT ML Study Plan - Phase 2
 """
 
 import asyncio
@@ -63,11 +63,12 @@ class TradeRecorder:
     for analyzing order flow dynamics and building Hawkes process models.
 
     Attributes:
-        venue (dict): Venue configuration
+        venue_config (dict): Venue configuration
         symbol (str): Trading pair symbol (e.g., 'BTCUSDT')
         seconds (int | None): Recording duration (None = indefinite)
         output (pathlib.Path): Output file path
         trades (list): Accumulated trade records
+        ws_url (str): WebSocket connection URL
         _stop (bool): Graceful shutdown flag
 
     Trade Message Format (Binance):
@@ -100,14 +101,14 @@ class TradeRecorder:
         if venue not in VENUES:
             raise ValueError(f"Unknown venue '{venue}'. Choose from {list(VENUES)}")
 
-        self.venue = VENUES[venue]
+        self.venue_config = VENUES[venue]
         self.symbol = symbol.upper()
         self.seconds = seconds
         self.output = pathlib.Path(output)
         self.output.parent.mkdir(parents=True, exist_ok=True)
 
         # Construct WebSocket URL
-        self.ws_url = f"{self.venue['WS']}/{self.symbol.lower()}@trade"
+        self.ws_url = f"{self.venue_config['WS']}/{self.symbol.lower()}@trade"
 
         # Trade storage
         self.trades = []
