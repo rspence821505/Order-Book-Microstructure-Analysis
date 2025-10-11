@@ -237,22 +237,22 @@ def print_quality_report(quality_report: dict):
     print("DATA QUALITY REPORT")
     print("=" * 60)
 
-    print(f"\n📊 Basic Info:")
+    print(f"\n Basic Info:")
     print(f"  Rows: {quality_report['n_rows']:,}")
     print(f"  Columns: {quality_report['n_columns']}")
     print(f"  Duplicates: {quality_report['n_duplicates']}")
 
-    print(f"\n❓ Missing Values:")
+    print(f"\n Missing Values:")
     missing = {k: v for k, v in quality_report["missing_values"].items() if v > 0}
     if missing:
         for col, count in missing.items():
             pct = quality_report["missing_pct"][col]
             print(f"  {col}: {count} ({pct:.2f}%)")
     else:
-        print("  ✅ No missing values")
+        print(" No missing values")
 
     if "timestamp_range" in quality_report:
-        print(f"\n🕐 Timestamp Info:")
+        print(f"\n Timestamp Info:")
         tr = quality_report["timestamp_range"]
         print(f"  Start: {tr['start']}")
         print(f"  End: {tr['end']}")
