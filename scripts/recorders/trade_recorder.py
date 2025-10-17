@@ -26,10 +26,8 @@ Output Format:
         - quantity: Trade size
         - is_buyer_maker: True if sell aggressor, False if buy aggressor
 
-Use Case:
-    Week 9 of Phase 2 - Hawkes process modeling of trade arrival dynamics
 
-Author: HFT ML Study Plan - Phase 2
+Author: Rylan Spence
 """
 
 import asyncio
