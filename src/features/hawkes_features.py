@@ -55,7 +55,7 @@ class HawkesFeatureExtractor:
 
     def intensity(self, eval_times: np.ndarray, event_times: np.ndarray) -> np.ndarray:
         """
-        Compute intensity λ(t) at specified times
+        Compute intensity λ(t) at specified times (vectorized for speed)
 
         Args:
             eval_times: Times at which to evaluate intensity
@@ -67,18 +67,58 @@ class HawkesFeatureExtractor:
         if not self.is_fitted:
             raise ValueError("Model not fitted yet. Call fit() first.")
 
-        return self.model.intensity(eval_times)
+        eval_times = np.asarray(eval_times)
+        event_times = np.asarray(event_times)
+        intensities = np.full(len(eval_times), self.mu)
 
-    def simulate(self, T: float, random_state: Optional[int] = None) -> np.ndarray:
+        # Vectorized computation
+        for i, t in enumerate(eval_times):
+            # Only consider events before time t
+            past_events = event_times[event_times < t]
+            if len(past_events) > 0:
+                # λ(t) = μ + α * Σ exp(-β * (t - t_i))
+                time_diffs = t - past_events
+                intensities[i] += self.alpha * np.sum(np.exp(-self.beta * time_diffs))
+
+        return intensities
+
+    # def simulate(self, T: float, random_state: Optional[int] = None) -> np.ndarray:
+    #     """
+    #     Simulate Hawkes process
+
+    #     Args:
+    #         T: Simulation horizon (time duration)
+    #         random_state: Random seed for reproducibility
+
+    #     Returns:
+    #         Simulated event times
+    #     """
+    #     if not self.is_fitted:
+    #         raise ValueError("Model not fitted yet. Call fit() first.")
+
+    #     if random_state is not None:
+    #         np.random.seed(random_state)
+
+    #     return self.model.sample(T)
+
+    def simulate(
+        self, T: float, random_state: Optional[int] = None, max_events: int = 100000
+    ) -> np.ndarray:
         """
-        Simulate Hawkes process
+        Simulate Hawkes process using Ogata's modified thinning algorithm
+
+        Algorithm:
+        1. Use exponential distribution to propose candidate event times
+        2. Compute actual intensity at candidate time
+        3. Accept/reject based on intensity ratio
 
         Args:
-            T: Simulation horizon (time duration)
+            T: Simulation horizon (time duration in seconds)
             random_state: Random seed for reproducibility
+            max_events: Safety limit on number of events
 
         Returns:
-            Simulated event times
+            Simulated event times as numpy array
         """
         if not self.is_fitted:
             raise ValueError("Model not fitted yet. Call fit() first.")
@@ -86,7 +126,51 @@ class HawkesFeatureExtractor:
         if random_state is not None:
             np.random.seed(random_state)
 
-        return self.model.sample(T)
+        events = []
+        t = 0.0
+
+        # Upper bound on intensity: λ(t) ≤ μ + α/β (when all past events decay slowly)
+        # This is the maximum possible intensity
+        lambda_bar = self.mu + (self.alpha / self.beta if self.beta > 0 else self.alpha)
+
+        # Safety check
+        if lambda_bar <= 0:
+            warnings.warn("Invalid intensity bound, returning empty simulation")
+            return np.array([])
+
+        iteration = 0
+        while t < T and len(events) < max_events:
+            iteration += 1
+
+            # Step 1: Generate candidate time from exponential with rate lambda_bar
+            # This overestimates the true rate, so we'll thin below
+            u = np.random.uniform()
+            dt = -np.log(u) / lambda_bar  # Exponential inter-arrival time
+            t = t + dt
+
+            if t >= T:
+                break
+
+            # Step 2: Compute actual intensity at candidate time t
+            # λ(t) = μ + Σ α * exp(-β * (t - t_i)) for all t_i < t
+            intensity_t = self.mu
+            if len(events) > 0:
+                past_events = np.array(events)
+                time_diffs = t - past_events
+                intensity_t += self.alpha * np.sum(np.exp(-self.beta * time_diffs))
+
+            # Step 3: Accept event with probability λ(t) / λ_bar
+            # This is the "thinning" step that corrects for oversampling
+            v = np.random.uniform()
+            acceptance_prob = intensity_t / lambda_bar
+
+            if v <= acceptance_prob:
+                events.append(t)
+
+        if len(events) >= max_events:
+            warnings.warn(f"Hit max_events limit ({max_events}), simulation truncated")
+
+        return np.array(events)
 
     def get_params(self) -> Dict[str, float]:
         """Return fitted parameters as dictionary"""
@@ -216,19 +300,36 @@ def compute_excitation_intensity(
 
 
 def hawkes_regime_features(
-    branching_ratio: np.ndarray, threshold: float = 0.7
+    branching_ratio: np.ndarray,
+    method: str = "binary",
+    thresholds: Optional[List[float]] = None,
 ) -> Dict[str, np.ndarray]:
     """
     Extract multiple regime-based features from Hawkes branching ratio
 
     Args:
         branching_ratio: Time series of branching ratios
-        threshold: Excitation threshold
+        method: 'binary' (2 regimes) or 'multi' (3+ regimes)
+        thresholds: Custom thresholds.
+                   For binary: single value (default 0.7)
+                   For multi: list of boundaries (default [0.3, 0.5])
 
     Returns:
         Dictionary of regime features
     """
-    regimes = detect_excitation_regimes(branching_ratio, threshold)
+    if method == "binary":
+        threshold = thresholds[0] if thresholds else 0.7
+        regimes = detect_excitation_regimes(branching_ratio, threshold)
+        regime_labels = ["baseline", "excited"]
+
+    elif method == "multi":
+        thresh = thresholds if thresholds else [0.3, 0.5]
+        bins = [0] + thresh + [1.0]
+        regimes = np.digitize(branching_ratio, bins=thresh)
+        regime_labels = ["calm", "normal", "excited"]
+
+    else:
+        raise ValueError(f"Unknown method: {method}")
 
     # Regime persistence (how long in current regime)
     regime_duration = np.zeros_like(regimes)
@@ -244,7 +345,8 @@ def hawkes_regime_features(
     regime_changes = np.diff(regimes, prepend=regimes[0])
 
     return {
-        "regime_binary": regimes,
+        "regime": regimes,
+        "regime_labels": regime_labels,
         "regime_duration": regime_duration,
         "regime_change": regime_changes,
         "excitation_intensity": compute_excitation_intensity(branching_ratio),
