@@ -195,3 +195,6 @@ reports/tables/*.csv
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+phase2_project.md
+POLYGON_INTEGRATION_SUMMARY.md

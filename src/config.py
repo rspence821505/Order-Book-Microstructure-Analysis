@@ -33,12 +33,47 @@ CONFIGS_DIR = PROJECT_ROOT / "configs"
 
 @dataclass
 class DataConfig:
-    """Data configuration."""
+    """Data configuration for both Binance (crypto) and Polygon.io (U.S. equities)."""
 
-    symbol: str = "BTCUSDT"
+    # Data source selection
+    data_source: str = "polygon"  # Options: "binance", "polygon"
+
+    # Common parameters
     start_date: str = "2024-01-01"
     end_date: str = "2024-03-31"
     lob_depth: int = 20
+
+    # Binance-specific (crypto)
+    binance_symbol: str = "BTCUSDT"  # Crypto trading pair
+
+    # Polygon.io-specific (U.S. equities)
+    polygon_ticker: str = "AAPL"  # Stock ticker symbol
+    polygon_api_key: Optional[str] = None  # Polygon.io API key (load from env or config file)
+
+    # Data directories (source-specific)
+    @property
+    def raw_trades_dir(self) -> Path:
+        """Get raw trades directory based on data source."""
+        if self.data_source == "polygon":
+            return RAW_DATA_DIR / "polygon_trades"
+        else:
+            return RAW_DATA_DIR / "binance_trades"
+
+    @property
+    def raw_quotes_dir(self) -> Path:
+        """Get raw quotes directory (Polygon.io only)."""
+        if self.data_source == "polygon":
+            return RAW_DATA_DIR / "polygon_quotes"
+        else:
+            raise ValueError("Quotes data only available for Polygon.io source")
+
+    @property
+    def raw_lob_dir(self) -> Path:
+        """Get raw LOB/snapshots directory based on data source."""
+        if self.data_source == "polygon":
+            return RAW_DATA_DIR / "polygon_snapshots"
+        else:
+            return RAW_DATA_DIR / "binance_snapshots"
 
 
 @dataclass

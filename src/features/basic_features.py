@@ -1,5 +1,19 @@
 """
 Basic microstructure feature engineering.
+
+This module provides fundamental microstructure feature calculations that work
+across different market data sources:
+    - Polygon.io: U.S. equity NBBO (National Best Bid/Offer) data
+    - Binance: Crypto order book data
+    - LOBSTER: Exchange-level order book data
+
+All functions use generic column names (bid_price, ask_price, etc.) that are
+compatible with data from any source after standardization via the data loaders.
+
+For Polygon.io U.S. equities:
+    - bid_price/ask_price refer to NBBO (consolidated best bid/offer across all exchanges)
+    - Depth features use L2 aggregated snapshots when available
+    - All spread calculations apply to NBBO quoted spread
 """
 
 import numpy as np

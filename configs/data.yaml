@@ -1,0 +1,203 @@
+# Data Configuration for Order Book Microstructure Analysis
+# Supports both Polygon.io (U.S. equities) and Binance (crypto)
+
+# Data Source Selection
+# Options: "polygon" (U.S. equity market data) or "binance" (crypto market data)
+data_source: polygon
+
+# Common Configuration
+common:
+  start_date: "2024-01-01"
+  end_date: "2024-03-31"
+  lob_depth: 10  # Number of order book levels to collect/analyze
+  time_zone: "America/New_York"  # For U.S. equity market hours
+
+# Polygon.io Configuration (U.S. Equities)
+polygon:
+  # API Configuration
+  api_key: ${POLYGON_API_KEY}  # Load from environment variable
+  api_base_url: "https://api.polygon.io"
+  websocket_url: "wss://socket.polygon.io"
+
+  # Ticker Configuration
+  primary_ticker: "AAPL"  # Primary instrument for analysis
+  alternative_tickers:
+    - "GOOG"
+    - "NVDA"
+    - "MSFT"
+
+  # Data Collection Settings
+  collection:
+    # REST API settings
+    trades_endpoint: "/v3/trades/{ticker}"
+    quotes_endpoint: "/v3/quotes/{ticker}"
+    snapshot_endpoint: "/v3/snapshot/locale/us/markets/stocks/tickers/{ticker}"
+
+    # Request limits
+    max_results_per_request: 50000  # Max: 50000 for Polygon.io
+    rate_limit_per_minute: 5  # Free tier: 5 req/min, Starter: 100 req/min
+
+    # Data filtering
+    filter_regular_trades: true  # Exclude odd-lots, out-of-sequence trades
+    filter_locked_markets: true  # Remove locked/crossed NBBO quotes
+    min_trade_size: 1  # Minimum trade size (shares)
+
+    # WebSocket settings (for real-time collection)
+    websocket_topics:
+      - "T.{ticker}"   # Trades
+      - "Q.{ticker}"   # Quotes (NBBO)
+      - "AM.{ticker}"  # Aggregated bars (optional)
+
+  # Data Storage
+  storage:
+    raw_trades_dir: "data/raw/polygon_trades"
+    raw_quotes_dir: "data/raw/polygon_quotes"
+    raw_snapshots_dir: "data/raw/polygon_snapshots"
+    interim_dir: "data/interim"
+    processed_dir: "data/processed"
+    file_format: "parquet"  # Options: parquet, csv
+    compression: "snappy"   # Options: snappy, gzip, none
+
+  # Market Hours (U.S. Eastern Time)
+  market_hours:
+    regular_start: "09:30:00"
+    regular_end: "16:00:00"
+    pre_market_start: "04:00:00"
+    pre_market_end: "09:30:00"
+    post_market_start: "16:00:00"
+    post_market_end: "20:00:00"
+    include_pre_market: false
+    include_post_market: false
+
+# Binance Configuration (Crypto)
+binance:
+  # API Configuration
+  api_base_url: "https://api.binance.com"
+  api_base_url_us: "https://api.binance.us"
+  websocket_url: "wss://stream.binance.com:9443/ws"
+  websocket_url_us: "wss://stream.binance.us:9443/ws"
+
+  # Trading Pair Configuration
+  primary_symbol: "BTCUSDT"
+  alternative_symbols:
+    - "ETHUSDT"
+    - "BNBUSDT"
+
+  venue: "binance"  # Options: "binance", "binanceus"
+
+  # Data Collection Settings
+  collection:
+    # WebSocket streams
+    depth_stream: "{symbol}@depth@100ms"
+    trade_stream: "{symbol}@trade"
+    lob_depth: 1000  # Depth levels: 5, 10, 20, 50, 100, 500, 1000
+
+    # Update frequency
+    snapshot_interval_ms: 100
+
+  # Data Storage
+  storage:
+    raw_trades_dir: "data/raw/binance_trades"
+    raw_snapshots_dir: "data/raw/binance_snapshots"
+    interim_dir: "data/interim"
+    processed_dir: "data/processed"
+    file_format: "parquet"
+    compression: "snappy"
+
+# Synchronization Settings (for aligning multiple data sources)
+synchronization:
+  # Alignment method: "asof", "nearest", "interpolate"
+  default_method: "asof"
+
+  # Alignment direction: "backward", "forward", "nearest"
+  # "backward" = use most recent quote before trade (standard for Lee-Ready)
+  default_direction: "backward"
+
+  # Maximum time tolerance for matching trades with quotes
+  max_tolerance_ms: 10  # 10 milliseconds
+
+  # Resampling frequency for unified timeline
+  unified_freq: "1S"  # 1 second intervals
+
+  # Fill method for missing data: "ffill", "bfill", "interpolate"
+  fill_method: "ffill"
+
+# Feature Engineering Settings
+features:
+  # NBBO-based features (Polygon.io)
+  nbbo:
+    compute_spread: true
+    compute_mid_price: true
+    compute_weighted_mid: true
+    compute_order_flow_imbalance: true
+
+  # LOB shape features
+  book_shape:
+    compute_slope: true
+    compute_volume_concentration: true
+    compute_depth_imbalance: true
+    max_levels: 10
+
+  # Trade-level features
+  trades:
+    classify_aggressiveness: true  # Lee-Ready algorithm
+    compute_vpin: true  # Volume-synchronized probability of informed trading
+    compute_trade_intensity: true
+    rolling_window_sec: 60  # 1-minute rolling windows
+
+  # Hawkes process features
+  hawkes:
+    enabled: true
+    rolling_window_sec: 300  # 5-minute windows for parameter estimation
+    compute_branching_ratio: true
+    compute_intensity: true
+
+  # Volatility features
+  volatility:
+    compute_realized_vol: true
+    windows_sec: [60, 300, 900]  # 1min, 5min, 15min
+    compute_microstructure_noise: true
+
+# Data Quality Settings
+quality:
+  # Trade filtering
+  exclude_conditions:  # Polygon.io trade condition codes to exclude
+    - 7    # Qualified Contingent Trade
+    - 9    # Corrected Trade
+    - 14   # Sold (out of sequence)
+    - 15   # Sold (out of sequence)
+    - 16   # Stopped stock
+    - 37   # Odd-lot trade
+    - 38   # Official closing price
+    - 52   # Out of sequence
+
+  # Quote filtering
+  min_spread_bps: 0.1  # Minimum spread in basis points (filter ultra-tight spreads)
+  max_spread_bps: 1000  # Maximum spread (filter wide spreads indicating data issues)
+
+  # Volume filtering
+  min_trade_size: 1
+  max_trade_size: 1000000  # Filter extremely large trades (potential errors)
+
+  # Time filtering
+  max_time_gap_sec: 10  # Maximum gap between consecutive updates
+
+  # Data validation
+  validate_lob_ordering: true  # Ensure bid prices decrease, ask prices increase
+  remove_stale_quotes: true
+  max_quote_age_sec: 1.0  # Flag quotes older than 1 second
+
+# Logging Configuration
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/data_collection.log"
+  console: true
+
+# Example Usage:
+#
+# from src.config import load_config, CONFIGS_DIR
+#
+# config = load_config(CONFIGS_DIR / "data.yaml")
+# ticker = config['polygon']['primary_ticker']  # "AAPL"
+# api_key = config['polygon']['api_key']
