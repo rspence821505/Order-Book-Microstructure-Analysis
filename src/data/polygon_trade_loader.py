@@ -294,8 +294,13 @@ class PolygonTradeLoader:
         }
 
         def is_regular(condition_list):
-            if pd.isna(condition_list) or not condition_list:
-                return True  # No conditions = regular trade
+            # Handle NaN or None
+            if pd.isna(condition_list):
+                return True
+            # Handle empty lists/arrays
+            if isinstance(condition_list, (list, np.ndarray)) and len(condition_list) == 0:
+                return True
+            # Check if any excluded condition is present
             return not any(c in exclude_conditions for c in condition_list)
 
         mask = trades['conditions'].apply(is_regular)
