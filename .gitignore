@@ -196,5 +196,6 @@ reports/tables/*.csv
 .DS_Store
 Thumbs.db
 
+polygon_api_key.txt
 phase2_project.md
 POLYGON_INTEGRATION_SUMMARY.md
