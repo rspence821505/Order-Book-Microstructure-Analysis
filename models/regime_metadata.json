@@ -1,0 +1,43 @@
+{
+  "n_states": 3,
+  "state_labels": {
+    "0": "Calm",
+    "2": "Trending",
+    "1": "Volatile"
+  },
+  "hmm_features": [
+    "branching_ratio"
+  ],
+  "transition_matrix": [
+    [
+      0.9976133651551344,
+      0.0023866348448656114,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      0.5,
+      0.0,
+      0.5
+    ]
+  ],
+  "regime_durations": {
+    "Calm": 419.00000000055655,
+    "Volatile": 1.0,
+    "Trending": 2.0
+  },
+  "hawkes_threshold_p75": 0.22913917018677216,
+  "hawkes_threshold_p50": 0.000585228762621749,
+  "hawkes_threshold_p25": 0.0002448858974686517,
+  "state_distribution": {
+    "0": 420,
+    "1": 1,
+    "2": 2
+  },
+  "training_log_likelihood": 1190.667875277974,
+  "converged": true
+}

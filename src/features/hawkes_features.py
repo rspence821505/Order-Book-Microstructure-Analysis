@@ -6,7 +6,7 @@ Uses hawkeslib for fitting, with custom feature engineering
 import numpy as np
 import pandas as pd
 from hawkeslib import UnivariateExpHawkesProcess
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, List
 import warnings
 
 
