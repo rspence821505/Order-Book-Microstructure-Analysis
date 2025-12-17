@@ -1,0 +1,30 @@
+{
+  "lr_l2": {
+    "train_accuracy": 0.7952522255192879,
+    "test_accuracy": 0.5647058823529412,
+    "test_precision": 0.6,
+    "test_recall": 0.5869565217391305,
+    "test_f1": 0.5934065934065934,
+    "test_roc_auc": 0.5930880713489409,
+    "n_features": 81,
+    "converged": true
+  },
+  "lr_l1": {
+    "train_accuracy": 0.7922848664688428,
+    "test_accuracy": 0.6,
+    "test_precision": 0.6666666666666666,
+    "test_recall": 0.5217391304347826,
+    "test_f1": 0.5853658536585366,
+    "test_roc_auc": 0.5975473801560757,
+    "n_features": 81,
+    "n_nonzero_coef": 43,
+    "converged": true
+  },
+  "data_info": {
+    "n_train": 337,
+    "n_test": 85,
+    "n_features": 81,
+    "target_col": "price_direction",
+    "price_col": "agg_mid_price"
+  }
+}
