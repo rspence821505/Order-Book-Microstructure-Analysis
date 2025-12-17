@@ -1,0 +1,205 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "n_features": 81,
+  "n_test_samples": 273,
+  "n_shap_samples": 273,
+  "top_10_builtin_rf": [
+    {
+      "feature": "impact_permanent_impact_5_mean",
+      "importance": 0.299186493870661
+    },
+    {
+      "feature": "agg_vwap_deviation",
+      "importance": 0.0885237004512172
+    },
+    {
+      "feature": "agg_intrabar_momentum",
+      "importance": 0.07193193192699328
+    },
+    {
+      "feature": "trade_volume_imbalance",
+      "importance": 0.02391266378890045
+    },
+    {
+      "feature": "impact_impact_per_share_mean",
+      "importance": 0.017116189907652218
+    },
+    {
+      "feature": "agg_trades",
+      "importance": 0.014698390991433727
+    },
+    {
+      "feature": "cluster_inter_arrival_std",
+      "importance": 0.014321008376294428
+    },
+    {
+      "feature": "impact_temp_impact_mean",
+      "importance": 0.014116631796073828
+    },
+    {
+      "feature": "trade_size_weighted_direction",
+      "importance": 0.013585956127038768
+    },
+    {
+      "feature": "agg_volume",
+      "importance": 0.012439732177523847
+    }
+  ],
+  "top_10_permutation_rf": [
+    {
+      "feature": "impact_permanent_impact_5_mean",
+      "importance_mean": 0.08811452277741799,
+      "importance_std": 0.0295093639172604
+    },
+    {
+      "feature": "agg_vwap_deviation",
+      "importance_mean": 0.01975756485392296,
+      "importance_std": 0.009383667217517737
+    },
+    {
+      "feature": "agg_intrabar_momentum",
+      "importance_mean": 0.017737092923762,
+      "importance_std": 0.007867130620061794
+    },
+    {
+      "feature": "impact_temp_impact_mean",
+      "importance_mean": 0.0059514395768178185,
+      "importance_std": 0.005080899917864608
+    },
+    {
+      "feature": "beta",
+      "importance_mean": 0.0045674037392253175,
+      "importance_std": 0.004005698483229674
+    },
+    {
+      "feature": "trade_size_ma_50",
+      "importance_mean": 0.004521047037489656,
+      "importance_std": 0.0031225085514346874
+    },
+    {
+      "feature": "trade_trade_count",
+      "importance_mean": 0.0038739428859847604,
+      "importance_std": 0.0010398562728039826
+    },
+    {
+      "feature": "impact_impact_per_share_mean",
+      "importance_mean": 0.003852927703356113,
+      "importance_std": 0.005600525191804085
+    },
+    {
+      "feature": "mu",
+      "importance_mean": 0.0036522281154828472,
+      "importance_std": 0.0017017250043863787
+    },
+    {
+      "feature": "adv_rv_scale_15min",
+      "importance_mean": 0.003383474353777072,
+      "importance_std": 0.00309888781932877
+    }
+  ],
+  "top_10_shap_rf": [
+    {
+      "feature": "impact_permanent_impact_5_mean",
+      "importance": 0.11486280040234051
+    },
+    {
+      "feature": "agg_intrabar_momentum",
+      "importance": 0.03717126218216851
+    },
+    {
+      "feature": "agg_vwap_deviation",
+      "importance": 0.03047276894080657
+    },
+    {
+      "feature": "trade_volume_imbalance",
+      "importance": 0.01294125727820536
+    },
+    {
+      "feature": "cluster_inter_arrival_std",
+      "importance": 0.007110298228667012
+    },
+    {
+      "feature": "impact_impact_per_share_mean",
+      "importance": 0.006672216623087031
+    },
+    {
+      "feature": "impact_temp_impact_mean",
+      "importance": 0.006366235624206625
+    },
+    {
+      "feature": "branching_ratio",
+      "importance": 0.005063037116549129
+    },
+    {
+      "feature": "trade_trade_direction",
+      "importance": 0.004908915210960664
+    },
+    {
+      "feature": "adv_vol_regime",
+      "importance": 0.004043415136231828
+    }
+  ],
+  "top_10_interactions": [
+    {
+      "feature_1": "agg_intrabar_momentum",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.004541820773770966
+    },
+    {
+      "feature_1": "agg_vwap_deviation",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.004207931491844987
+    },
+    {
+      "feature_1": "trade_volume_imbalance",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.002758116423035842
+    },
+    {
+      "feature_1": "adv_return_skew",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.002092105846268701
+    },
+    {
+      "feature_1": "agg_intrabar_momentum",
+      "feature_2": "trade_volume_imbalance",
+      "interaction_strength": 0.0018364444286380125
+    },
+    {
+      "feature_1": "impact_permanent_impact_5_mean",
+      "feature_2": "cluster_inter_arrival_std",
+      "interaction_strength": 0.0017386668665012475
+    },
+    {
+      "feature_1": "trade_trade_direction",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.0016884221587687858
+    },
+    {
+      "feature_1": "agg_vwap_deviation",
+      "feature_2": "agg_intrabar_momentum",
+      "interaction_strength": 0.0015544317876945392
+    },
+    {
+      "feature_1": "trade_size_weighted_direction",
+      "feature_2": "impact_permanent_impact_5_mean",
+      "interaction_strength": 0.0015325722798525709
+    },
+    {
+      "feature_1": "agg_vwap_deviation",
+      "feature_2": "trade_volume_imbalance",
+      "interaction_strength": 0.0015273555377918347
+    }
+  ],
+  "builtin_concentration": {
+    "top_10_pct": 56.98326994137887,
+    "top_20_pct": 67.20554269555485
+  },
+  "shap_concentration": {
+    "top_10_pct": 67.62296879549965,
+    "top_20_pct": 77.82754752665107
+  }
+}
