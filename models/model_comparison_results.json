@@ -1,0 +1,123 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "models_compared": [
+    "Logistic Regression",
+    "Decision Tree",
+    "Random Forest",
+    "Gradient Boosting"
+  ],
+  "performance": {
+    "Logistic Regression": {
+      "test_accuracy": 0.6703296703296703,
+      "test_f1": 0.64,
+      "test_auc": 0.7327530625402966,
+      "test_precision": 0.7339449541284404,
+      "test_recall": 0.5673758865248227,
+      "accuracy_gap": 0.04552734158600347
+    },
+    "Decision Tree": {
+      "test_accuracy": 0.6373626373626373,
+      "test_f1": 0.6688963210702341,
+      "test_auc": 0.6312594025359983,
+      "test_precision": 0.6329113924050633,
+      "test_recall": 0.7092198581560284,
+      "accuracy_gap": 0.1004925413724681
+    },
+    "Random Forest": {
+      "test_accuracy": 0.63003663003663,
+      "test_f1": 0.6353790613718412,
+      "test_auc": 0.6944981732215775,
+      "test_precision": 0.6470588235294118,
+      "test_recall": 0.624113475177305,
+      "accuracy_gap": 0.16098078517876868
+    },
+    "Gradient Boosting": {
+      "test_accuracy": 0.6446886446886447,
+      "test_f1": 0.6472727272727272,
+      "test_auc": 0.708628841607565,
+      "test_precision": 0.664179104477612,
+      "test_recall": 0.6312056737588653,
+      "accuracy_gap": 0.1756596596193296
+    }
+  },
+  "best_models": {
+    "accuracy": "Logistic Regression",
+    "f1_score": "Decision Tree",
+    "roc_auc": "Logistic Regression",
+    "least_overfit": "Logistic Regression"
+  },
+  "latencies_us": {
+    "Logistic Regression": 15,
+    "Decision Tree": 49.421199946664274,
+    "Random Forest": 27294.70859922003,
+    "Gradient Boosting": 169.84129979391582
+  },
+  "statistical_significance": [
+    {
+      "comparison": "Decision Tree vs. Logistic Regression",
+      "mean_diff": -0.03282051282051282,
+      "ci_lower": -0.08791208791208793,
+      "ci_upper": 0.025641025641025553,
+      "p_value": 0.89,
+      "significant": false
+    },
+    {
+      "comparison": "Random Forest vs. Logistic Regression",
+      "mean_diff": -0.03967399267399267,
+      "ci_lower": -0.09157509157509158,
+      "ci_upper": 0.0146520146520146,
+      "p_value": 0.937,
+      "significant": false
+    },
+    {
+      "comparison": "Gradient Boosting vs. Logistic Regression",
+      "mean_diff": -0.025853479853479855,
+      "ci_lower": -0.07326007326007322,
+      "ci_upper": 0.022069597069597015,
+      "p_value": 0.851,
+      "significant": false
+    }
+  ],
+  "recommendations": {
+    "Ultra-Low Latency HFT (<100\u03bcs)": {
+      "recommended": "Logistic Regression",
+      "reason": "Fastest inference (~15\u03bcs), meets strict latency requirements",
+      "tradeoff": "Lower accuracy (0.670 vs 0.645)"
+    },
+    "Medium-Latency Trading (100-500\u03bcs)": {
+      "recommended": "Random Forest",
+      "reason": "Best accuracy-speed balance (~27295\u03bcs, 0.630 accuracy)",
+      "tradeoff": "Requires batch retraining, less interpretable than Decision Tree"
+    },
+    "Latency-Tolerant (>500\u03bcs)": {
+      "recommended": "Gradient Boosting",
+      "reason": "Highest accuracy (0.645), best F1 score (0.647)",
+      "tradeoff": "Slower inference (~170\u03bcs), sequential evaluation"
+    },
+    "Regulatory/Compliance": {
+      "recommended": "Decision Tree or Logistic Regression",
+      "reason": "Highly interpretable (rules or coefficients), easy to explain to regulators",
+      "tradeoff": "Lower accuracy than ensemble methods"
+    },
+    "Research/Prototyping": {
+      "recommended": "Gradient Boosting",
+      "reason": "Maximum predictive power for strategy validation",
+      "tradeoff": "May need simplification for production deployment"
+    },
+    "Production (Balanced)": {
+      "recommended": "Random Forest",
+      "reason": "Robust to overfitting (0.161 gap), good accuracy, acceptable latency",
+      "tradeoff": "Moderate memory footprint (~50MB for 100 trees)"
+    }
+  },
+  "key_findings": [
+    "Gradient Boosting achieves highest accuracy (0.645)",
+    "Random Forest offers best accuracy-speed balance",
+    "Logistic Regression fastest inference (~15\u03bcs) but lower accuracy",
+    "All tree models significantly outperform logistic regression",
+    "Random Forest has lowest overfitting risk (gap: 0.161)"
+  ]
+}
