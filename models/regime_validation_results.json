@@ -1,0 +1,66 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "initial_capital": 100000,
+  "transaction_cost_bps": 5,
+  "strategies": {
+    "Baseline (RF)": {
+      "total_trades": 38,
+      "final_capital": 98837.13986690855,
+      "total_return_pct": -1.1628601330914534,
+      "sharpe_ratio": -20.194276893417015,
+      "max_drawdown": 1.1821642002785122,
+      "win_rate": 73.68421052631578,
+      "profit_factor": 0.04648055839529341,
+      "calmar_ratio": -0.9836705703128965
+    },
+    "Regime Model": {
+      "total_trades": 2,
+      "final_capital": 99916.48903097352,
+      "total_return_pct": -0.08351096902647986,
+      "sharpe_ratio": -36.16936581393027,
+      "max_drawdown": 0.08351096902647986,
+      "win_rate": 50.0,
+      "profit_factor": 0.0,
+      "calmar_ratio": -1.0
+    },
+    "Regime Sizing": {
+      "total_trades": 38,
+      "final_capital": 98874.19479150465,
+      "total_return_pct": -1.1258052084953525,
+      "sharpe_ratio": -20.194276893417015,
+      "max_drawdown": 1.1354622996915766,
+      "win_rate": 73.68421052631578,
+      "profit_factor": 0.036958367953440596,
+      "calmar_ratio": -0.9914950137940755
+    },
+    "Confidence Filter": {
+      "total_trades": 13,
+      "final_capital": 99694.81694767387,
+      "total_return_pct": -0.3051830523261306,
+      "sharpe_ratio": -22.541677502406788,
+      "max_drawdown": 0.3051830523261306,
+      "win_rate": 84.61538461538461,
+      "profit_factor": 0.0,
+      "calmar_ratio": -1.0
+    },
+    "Combined": {
+      "total_trades": 0,
+      "final_capital": 100000,
+      "total_return_pct": 0,
+      "sharpe_ratio": 0,
+      "max_drawdown": 0,
+      "win_rate": 0,
+      "profit_factor": 0,
+      "calmar_ratio": 0
+    }
+  },
+  "best_strategy": {
+    "by_sharpe": "Combined",
+    "sharpe_value": 0.0,
+    "by_return": "Combined",
+    "return_value": 0.0
+  }
+}

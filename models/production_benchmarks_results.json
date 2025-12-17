@@ -1,0 +1,46 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "performance_targets": {
+    "feature_latency_us": 200,
+    "model_latency_us": 500,
+    "total_latency_us": 1000
+  },
+  "model_latency": {
+    "Decision Tree": {
+      "p50_us": 46.66699896915816,
+      "p90_us": 49.421199946664274,
+      "p99_us": 76.7209200603247,
+      "meets_target": true
+    },
+    "Random Forest": {
+      "p50_us": 14280.291999966721,
+      "p90_us": 27294.70859922003,
+      "p99_us": 40782.614999970974,
+      "meets_target": false
+    },
+    "Gradient Boosting": {
+      "p50_us": 166.54200044285972,
+      "p90_us": 169.84129979391582,
+      "p99_us": 210.0939992669737,
+      "meets_target": true
+    }
+  },
+  "model_memory_mb": {
+    "Decision Tree": 0.005112648010253906,
+    "Random Forest": 1.294504165649414,
+    "Gradient Boosting": 0.524622917175293
+  },
+  "compression_sweet_spot": {
+    "recommended_trees": 100,
+    "accuracy_loss": -0.00366300366300365,
+    "latency_improvement": 13178.916699871479
+  },
+  "production_ready": {
+    "decision_tree": true,
+    "random_forest": false,
+    "gradient_boosting": true
+  }
+}

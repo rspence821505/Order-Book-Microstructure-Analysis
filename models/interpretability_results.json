@@ -1,0 +1,73 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "n_test_samples": 273,
+  "decision_tree": {
+    "max_depth": 7,
+    "n_leaves": 16,
+    "n_nodes": 31
+  },
+  "calibration": {
+    "decision_tree_brier": 0.24920497144645992,
+    "random_forest_brier": 0.22233233021526413,
+    "gradient_boosting_brier": 0.21875220023408265
+  },
+  "confidence_analysis": {
+    "random_forest": [
+      {
+        "confidence_range": "Low (0.0-0.6)",
+        "n_samples": 260,
+        "pct_samples": 95.23809523809524,
+        "accuracy": 0.6192307692307693,
+        "f1_score": 0.6147859922178989
+      },
+      {
+        "confidence_range": "Medium-Low (0.6-0.7)",
+        "n_samples": 12,
+        "pct_samples": 4.395604395604396,
+        "accuracy": 0.8333333333333334,
+        "f1_score": 0.8888888888888888
+      },
+      {
+        "confidence_range": "Medium-High (0.7-0.8)",
+        "n_samples": 1,
+        "pct_samples": 0.3663003663003663,
+        "accuracy": 1.0,
+        "f1_score": 1.0
+      }
+    ]
+  },
+  "filtering_analysis": [
+    {
+      "threshold": 0.5,
+      "n_predictions": 38,
+      "pct_kept": 13.91941391941392,
+      "accuracy": 0.7368421052631579,
+      "f1_score": 0.7727272727272727
+    },
+    {
+      "threshold": 0.6,
+      "n_predictions": 13,
+      "pct_kept": 4.761904761904762,
+      "accuracy": 0.8461538461538461,
+      "f1_score": 0.9
+    },
+    {
+      "threshold": 0.7,
+      "n_predictions": 1,
+      "pct_kept": 0.3663003663003663,
+      "accuracy": 1.0,
+      "f1_score": 1.0
+    }
+  ],
+  "top_features_analyzed": [
+    "impact_permanent_impact_5_mean",
+    "agg_intrabar_momentum",
+    "agg_vwap_deviation",
+    "trade_volume_imbalance",
+    "cluster_inter_arrival_std",
+    "impact_impact_per_share_mean"
+  ]
+}
