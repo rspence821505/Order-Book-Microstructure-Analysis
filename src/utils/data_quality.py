@@ -189,8 +189,26 @@ def check_data_quality(
     quality_report["missing_values"] = df.isnull().sum().to_dict()
     quality_report["missing_pct"] = (df.isnull().sum() / len(df) * 100).to_dict()
 
-    # Duplicates
-    quality_report["n_duplicates"] = df.duplicated().sum()
+    # Duplicates (exclude columns with unhashable types like arrays)
+    try:
+        # Try to check duplicates on all columns
+        quality_report["n_duplicates"] = df.duplicated().sum()
+    except TypeError:
+        # If error, exclude columns with unhashable types (e.g., arrays, lists)
+        hashable_cols = []
+        for col in df.columns:
+            try:
+                # Test if column values are hashable
+                hash(df[col].iloc[0])
+                hashable_cols.append(col)
+            except (TypeError, AttributeError):
+                # Skip unhashable columns (arrays, lists, etc.)
+                continue
+
+        if hashable_cols:
+            quality_report["n_duplicates"] = df[hashable_cols].duplicated().sum()
+        else:
+            quality_report["n_duplicates"] = 0
 
     # Timestamp checks
     if timestamp_col in df.columns:
