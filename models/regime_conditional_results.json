@@ -1,0 +1,92 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "random_forest": {
+    "global": {
+      "test_accuracy": 0.6446886446886447,
+      "test_f1": 0.6394052044609665,
+      "test_roc_auc": 0.6852030947775628
+    },
+    "regime_conditional": {
+      "test_accuracy": 0.6117216117216118,
+      "test_f1": 0.6159420289855072,
+      "test_roc_auc": 0.6740812379110251
+    },
+    "improvement": {
+      "accuracy": -0.03296703296703296,
+      "f1": -0.023463175475459286,
+      "roc_auc": -0.01112185686653766,
+      "accuracy_pct": -5.113636363636362,
+      "f1_pct": -3.6695315133131094,
+      "roc_auc_pct": -1.6231474947071196
+    },
+    "statistical_test": {
+      "mean_diff": -0.032402930402930394,
+      "ci_lower": -0.07326007326007333,
+      "ci_upper": 0.010989010989010953,
+      "p_value": 0.937,
+      "significant_at_0.05": false
+    }
+  },
+  "gradient_boosting": {
+    "global": {
+      "test_accuracy": 0.6446886446886447,
+      "test_f1": 0.6135458167330677,
+      "test_roc_auc": 0.7167418869546529
+    },
+    "regime_conditional": {
+      "test_accuracy": 0.6190476190476191,
+      "test_f1": 0.6060606060606061,
+      "test_roc_auc": 0.6676875134321942
+    },
+    "improvement": {
+      "accuracy": -0.02564102564102566,
+      "f1": -0.007485210672461662,
+      "roc_auc": -0.04905437352245867,
+      "accuracy_pct": -3.97727272727273,
+      "f1_pct": -1.2199921290830371,
+      "roc_auc_pct": -6.844077961019496
+    },
+    "statistical_test": {
+      "mean_diff": -0.0266007326007326,
+      "ci_lower": -0.08058608058608063,
+      "ci_upper": 0.02930402930402931,
+      "p_value": 0.849,
+      "significant_at_0.05": false
+    }
+  },
+  "per_regime_performance": [
+    {
+      "regime": "Trending",
+      "n_samples": 123,
+      "rf_global_acc": 0.6666666666666666,
+      "rf_conditional_acc": 0.6016260162601627,
+      "rf_improvement": -0.06504065040650397,
+      "gb_global_acc": 0.6260162601626016,
+      "gb_conditional_acc": 0.6178861788617886,
+      "gb_improvement": -0.008130081300812941
+    },
+    {
+      "regime": "Calm",
+      "n_samples": 121,
+      "rf_global_acc": 0.6363636363636364,
+      "rf_conditional_acc": 0.6198347107438017,
+      "rf_improvement": -0.016528925619834656,
+      "gb_global_acc": 0.6694214876033058,
+      "gb_conditional_acc": 0.6446280991735537,
+      "gb_improvement": -0.024793388429752095
+    },
+    {
+      "regime": "Volatile",
+      "n_samples": 29,
+      "rf_global_acc": 0.5862068965517241,
+      "rf_conditional_acc": 0.6206896551724138,
+      "rf_improvement": 0.034482758620689724,
+      "gb_global_acc": 0.6206896551724138,
+      "gb_conditional_acc": 0.5172413793103449,
+      "gb_improvement": -0.10344827586206895
+    }
+  ]
+}

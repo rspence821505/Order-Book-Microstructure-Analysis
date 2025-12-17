@@ -1,10 +1,40 @@
-|--- agg_vwap_deviation <= 0.00
-|   |--- agg_vwap_deviation <= -0.00
-|   |   |--- class: 0
-|   |--- agg_vwap_deviation >  -0.00
-|   |   |--- class: 0
-|--- agg_vwap_deviation >  0.00
+|--- impact_permanent_impact_5_mean <= 0.00
+|   |--- impact_permanent_impact_5_mean <= -0.00
+|   |   |--- impact_permanent_impact_5_mean <= -0.00
+|   |   |   |--- impact_temp_impact_mean <= 0.00
+|   |   |   |   |--- class: 0
+|   |   |   |--- impact_temp_impact_mean >  0.00
+|   |   |   |   |--- class: 0
+|   |   |--- impact_permanent_impact_5_mean >  -0.00
+|   |   |   |--- trade_is_aggressive_sell <= 1.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- trade_is_aggressive_sell >  1.50
+|   |   |   |   |--- class: 0
+|   |--- impact_permanent_impact_5_mean >  -0.00
+|   |   |--- agg_intrabar_momentum <= 0.00
+|   |   |   |--- adv_variance_ratio_5 <= 0.52
+|   |   |   |   |--- class: 0
+|   |   |   |--- adv_variance_ratio_5 >  0.52
+|   |   |   |   |--- class: 0
+|   |   |--- agg_intrabar_momentum >  0.00
+|   |   |   |--- class: 1
+|--- impact_permanent_impact_5_mean >  0.00
 |   |--- agg_vwap_deviation <= 0.00
-|   |   |--- class: 1
+|   |   |--- impact_permanent_impact_5_mean <= 0.00
+|   |   |   |--- agg_vwap_deviation <= -0.00
+|   |   |   |   |--- class: 0
+|   |   |   |--- agg_vwap_deviation >  -0.00
+|   |   |   |   |--- class: 1
+|   |   |--- impact_permanent_impact_5_mean >  0.00
+|   |   |   |--- agg_vwap_deviation <= -0.00
+|   |   |   |   |--- class: 1
+|   |   |   |--- agg_vwap_deviation >  -0.00
+|   |   |   |   |--- class: 1
 |   |--- agg_vwap_deviation >  0.00
-|   |   |--- class: 1
+|   |   |--- regime_duration <= 43.50
+|   |   |   |--- adv_variance_ratio_5 <= 0.79
+|   |   |   |   |--- class: 1
+|   |   |   |--- adv_variance_ratio_5 >  0.79
+|   |   |   |   |--- class: 1
+|   |   |--- regime_duration >  43.50
+|   |   |   |--- class: 1

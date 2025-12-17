@@ -1,0 +1,105 @@
+{
+  "ticker": "AAPL",
+  "start_date": "2024-12-09",
+  "end_date": "2024-12-13",
+  "date_range": "2024-12-09_to_2024-12-13",
+  "gb_baseline": {
+    "train_accuracy": 0.9083409715857012,
+    "test_accuracy": 0.673992673992674,
+    "test_precision": 0.7203389830508474,
+    "test_recall": 0.6028368794326241,
+    "test_f1": 0.6563706563706564,
+    "test_roc_auc": 0.7144315495379324,
+    "n_estimators": 100,
+    "learning_rate": 0.1
+  },
+  "gb_tuned": {
+    "train_accuracy": 0.8203483043079743,
+    "test_accuracy": 0.6446886446886447,
+    "test_precision": 0.664179104477612,
+    "test_recall": 0.6312056737588653,
+    "test_f1": 0.6472727272727272,
+    "test_roc_auc": 0.708628841607565,
+    "train_test_gap": 0.1756596596193296,
+    "best_params": {
+      "subsample": 0.8,
+      "n_estimators": 300,
+      "min_samples_split": 100,
+      "min_samples_leaf": 50,
+      "max_depth": 5,
+      "learning_rate": 0.01
+    },
+    "cv_f1_score": 0.6517957620935881
+  },
+  "improvement_over_baseline": {
+    "accuracy": -0.03663003663003661,
+    "f1": -0.019393939393939408,
+    "roc_auc": -0.02509133892112614,
+    "accuracy_pct": -5.376344086021502,
+    "f1_pct": -2.9090909090909114,
+    "roc_auc_pct": -3.419742237844169
+  },
+  "improvement_over_decision_tree": {
+    "accuracy": 0.007326007326007411,
+    "f1": -0.02162359379750689,
+    "roc_auc": 0.07736943907156668,
+    "accuracy_pct": 1.1494252873563353,
+    "f1_pct": -3.23272727272728,
+    "roc_auc_pct": 12.256362243595191
+  },
+  "comparison_to_random_forest": {
+    "accuracy": 0.014652014652014711,
+    "f1": 0.01189366590088603,
+    "roc_auc": 0.014130668385987533,
+    "accuracy_pct": 2.3255813953488467,
+    "f1_pct": 1.871900826446267,
+    "roc_auc_pct": 2.0346588271700448
+  },
+  "learning_rate_analysis": [
+    {
+      "learning_rate": 0.01,
+      "train_time": 8.857309103012085,
+      "train_acc": 0.8982584784601283,
+      "test_acc": 0.663003663003663,
+      "test_f1": 0.6617647058823529,
+      "test_roc_auc": 0.6911669890393295,
+      "overfit_gap": 0.23525481545646532
+    },
+    {
+      "learning_rate": 0.05,
+      "train_time": 8.985440731048584,
+      "train_acc": 0.999083409715857,
+      "test_acc": 0.6410256410256411,
+      "test_f1": 0.6397058823529411,
+      "test_roc_auc": 0.7122286696754782,
+      "overfit_gap": 0.3580577686902159
+    },
+    {
+      "learning_rate": 0.1,
+      "train_time": 8.687442064285278,
+      "train_acc": 1.0,
+      "test_acc": 0.6446886446886447,
+      "test_f1": 0.6135458167330677,
+      "test_roc_auc": 0.7167418869546529,
+      "overfit_gap": 0.35531135531135527
+    },
+    {
+      "learning_rate": 0.2,
+      "train_time": 8.701007843017578,
+      "train_acc": 1.0,
+      "test_acc": 0.6410256410256411,
+      "test_f1": 0.6259541984732825,
+      "test_roc_auc": 0.6945519019987106,
+      "overfit_gap": 0.3589743589743589
+    },
+    {
+      "learning_rate": 0.3,
+      "train_time": 8.667233943939209,
+      "train_acc": 1.0,
+      "test_acc": 0.6043956043956044,
+      "test_f1": 0.5609756097560976,
+      "test_roc_auc": 0.6949280034386418,
+      "overfit_gap": 0.39560439560439564
+    }
+  ]
+}

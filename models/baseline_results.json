@@ -1,28 +1,28 @@
 {
   "lr_l2": {
-    "train_accuracy": 0.7952522255192879,
-    "test_accuracy": 0.5647058823529412,
-    "test_precision": 0.6,
-    "test_recall": 0.5869565217391305,
-    "test_f1": 0.5934065934065934,
-    "test_roc_auc": 0.5930880713489409,
+    "train_accuracy": 0.7286892758936755,
+    "test_accuracy": 0.6813186813186813,
+    "test_precision": 0.725,
+    "test_recall": 0.6170212765957447,
+    "test_f1": 0.6666666666666666,
+    "test_roc_auc": 0.7337201805286911,
     "n_features": 81,
     "converged": true
   },
   "lr_l1": {
-    "train_accuracy": 0.7922848664688428,
-    "test_accuracy": 0.6,
-    "test_precision": 0.6666666666666666,
-    "test_recall": 0.5217391304347826,
-    "test_f1": 0.5853658536585366,
-    "test_roc_auc": 0.5975473801560757,
+    "train_accuracy": 0.7140238313473877,
+    "test_accuracy": 0.6776556776556777,
+    "test_precision": 0.7264957264957265,
+    "test_recall": 0.6028368794326241,
+    "test_f1": 0.6589147286821705,
+    "test_roc_auc": 0.7241027294218784,
     "n_features": 81,
-    "n_nonzero_coef": 43,
+    "n_nonzero_coef": 55,
     "converged": true
   },
   "data_info": {
-    "n_train": 337,
-    "n_test": 85,
+    "n_train": 1091,
+    "n_test": 273,
     "n_features": 81,
     "target_col": "price_direction",
     "price_col": "agg_mid_price"

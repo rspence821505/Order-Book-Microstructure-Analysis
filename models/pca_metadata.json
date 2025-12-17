@@ -1,8 +1,8 @@
 {
   "n_original_features": 81,
-  "n_components": 21,
-  "variance_explained": 0.9029591054266568,
-  "compression_ratio": 0.25925925925925924,
+  "n_components": 29,
+  "variance_explained": 0.9028736017970018,
+  "compression_ratio": 0.35802469135802467,
   "target_variance": 0.9,
   "microstructure_features": [
     "agg_volume",
@@ -92,6 +92,6 @@
     "window_end",
     "n_events"
   ],
-  "stability_avg": 0.2603326864361627,
-  "stability_std": 0.08928403347249782
+  "stability_avg": 0.41155577066461957,
+  "stability_std": 0.026978796840116715
 }

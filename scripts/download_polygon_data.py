@@ -16,8 +16,9 @@ Usage:
 import argparse
 import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
 import sys
+import pandas as pd
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
@@ -49,6 +50,20 @@ def load_api_key(api_key_file: Path) -> str:
     )
 
 
+def generate_date_range(start_date: str, end_date: str) -> list:
+    """Generate list of dates between start_date and end_date (inclusive)."""
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    end = datetime.strptime(end_date, "%Y-%m-%d")
+
+    dates = []
+    current = start
+    while current <= end:
+        dates.append(current.strftime("%Y-%m-%d"))
+        current += timedelta(days=1)
+
+    return dates
+
+
 def download_trades(ticker: str, start_date: str, end_date: str, output_dir: Path, api_key: str):
     """Download trade tick data from Polygon.io API."""
     print(f"\n{'='*60}")
@@ -63,26 +78,45 @@ def download_trades(ticker: str, start_date: str, end_date: str, output_dir: Pat
             ticker=ticker
         )
 
-        # Fetch data from API for the specified date
-        # Note: For simplicity, we're fetching only the start_date
-        # For multi-day ranges, loop through dates
-        trades_df = loader.fetch_from_api(date=start_date)
+        # Generate date range
+        dates = generate_date_range(start_date, end_date)
+        print(f"  Downloading {len(dates)} day(s): {start_date} to {end_date}")
 
-        if trades_df is None or len(trades_df) == 0:
-            print(f"  ⚠️  No trade data available for {ticker} on {start_date}")
+        all_trades = []
+
+        # Loop through each date
+        for date in dates:
+            print(f"\n  Fetching {date}...")
+            trades_df = loader.fetch_from_api(date=date)
+
+            if trades_df is None or len(trades_df) == 0:
+                print(f"    ⚠️  No trade data available for {date}")
+                continue
+
+            # Filter for regular trades
+            trades_df = loader.filter_regular_trades(trades_df)
+            print(f"    ✓ Fetched {len(trades_df):,} regular trades")
+            all_trades.append(trades_df)
+
+        if not all_trades:
+            print(f"  ⚠️  No trade data available for any date in range")
             return
 
-        # Filter for regular trades (exclude odd-lots, etc.)
-        trades_df = loader.filter_regular_trades(trades_df)
+        # Combine all dates
+        combined_trades = pd.concat(all_trades, ignore_index=True)
+        combined_trades = combined_trades.sort_values('timestamp').reset_index(drop=True)
 
         # Save to parquet
         output_dir.mkdir(parents=True, exist_ok=True)
-        filename = f"{ticker}_{start_date}_trades.parquet"
+        if start_date == end_date:
+            filename = f"{ticker}_{start_date}_trades.parquet"
+        else:
+            filename = f"{ticker}_{start_date}_to_{end_date}_trades.parquet"
         output_path = output_dir / filename
-        trades_df.to_parquet(output_path, index=False)
+        combined_trades.to_parquet(output_path, index=False)
 
         file_size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"  ✓ Saved {len(trades_df):,} trades")
+        print(f"\n  ✓ Saved {len(combined_trades):,} total trades")
         print(f"  ✓ File: {output_path}")
         print(f"  ✓ Size: {file_size_mb:.2f} MB")
 
@@ -194,34 +228,55 @@ def download_aggregates(
             ticker=ticker
         )
 
-        # Fetch data from API for the specified date
-        agg_df = loader.fetch_from_api(
-            date=start_date,
-            timespan=timespan,
-            multiplier=multiplier
-        )
+        # Generate date range
+        dates = generate_date_range(start_date, end_date)
+        print(f"  Downloading {len(dates)} day(s): {start_date} to {end_date}")
 
-        if agg_df is None or len(agg_df) == 0:
-            print(f"  ⚠️  No aggregate data available for {ticker} on {start_date}")
+        all_aggregates = []
+
+        # Loop through each date
+        for date in dates:
+            print(f"\n  Fetching {date}...")
+            agg_df = loader.fetch_from_api(
+                date=date,
+                timespan=timespan,
+                multiplier=multiplier
+            )
+
+            if agg_df is None or len(agg_df) == 0:
+                print(f"    ⚠️  No aggregate data available for {date}")
+                continue
+
+            # Compute spread features
+            agg_df = loader.compute_spread_features(agg_df)
+            print(f"    ✓ Fetched {len(agg_df):,} bars")
+            all_aggregates.append(agg_df)
+
+        if not all_aggregates:
+            print(f"  ⚠️  No aggregate data available for any date in range")
             return
 
-        # Compute spread features (spread ≈ High - Low)
-        agg_df = loader.compute_spread_features(agg_df)
+        # Combine all dates
+        combined_aggregates = pd.concat(all_aggregates, ignore_index=True)
+        combined_aggregates = combined_aggregates.sort_values('timestamp').reset_index(drop=True)
 
         # Save to parquet
         output_dir.mkdir(parents=True, exist_ok=True)
-        filename = f"{ticker}_{start_date}_{multiplier}{timespan}_bars.parquet"
+        if start_date == end_date:
+            filename = f"{ticker}_{start_date}_{multiplier}{timespan}_bars.parquet"
+        else:
+            filename = f"{ticker}_{start_date}_to_{end_date}_{multiplier}{timespan}_bars.parquet"
         output_path = output_dir / filename
-        agg_df.to_parquet(output_path, index=False)
+        combined_aggregates.to_parquet(output_path, index=False)
 
         file_size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f"  ✓ Saved {len(agg_df):,} bars")
+        print(f"\n  ✓ Saved {len(combined_aggregates):,} total bars")
         print(f"  ✓ File: {output_path}")
         print(f"  ✓ Size: {file_size_mb:.2f} MB")
 
         # Show sample spread stats
-        avg_spread = agg_df['estimated_spread'].mean()
-        avg_spread_bps = (agg_df['relative_spread'].mean() * 10000)
+        avg_spread = combined_aggregates['estimated_spread'].mean()
+        avg_spread_bps = (combined_aggregates['relative_spread'].mean() * 10000)
         print(f"  ✓ Avg spread: ${avg_spread:.4f} ({avg_spread_bps:.2f} bps)")
 
     except Exception as e:
