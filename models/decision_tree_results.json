@@ -1,0 +1,149 @@
+{
+  "dt_baseline": {
+    "train_accuracy": 1.0,
+    "test_accuracy": 0.5647058823529412,
+    "test_precision": 0.5849056603773585,
+    "test_recall": 0.6739130434782609,
+    "test_f1": 0.6262626262626263,
+    "test_roc_auc": 0.5549052396878484,
+    "tree_depth": 12,
+    "n_leaves": 61
+  },
+  "dt_tuned": {
+    "train_accuracy": 0.798219584569733,
+    "test_accuracy": 0.5764705882352941,
+    "test_precision": 0.6041666666666666,
+    "test_recall": 0.6304347826086957,
+    "test_f1": 0.6170212765957447,
+    "test_roc_auc": 0.6323857302118172,
+    "tree_depth": 5,
+    "n_leaves": 15,
+    "best_params": {
+      "criterion": "entropy",
+      "max_depth": 5,
+      "min_samples_leaf": 10,
+      "min_samples_split": 20
+    },
+    "cv_f1_score": 0.662845789687895
+  },
+  "improvement_over_baseline": {
+    "accuracy": 0.0117647058823529,
+    "f1": 0.023614683189151275,
+    "roc_auc": 0.039297658862876284,
+    "accuracy_pct": 2.083333333333326,
+    "f1_pct": 3.979511426319937,
+    "roc_auc_pct": 6.625939849624065
+  },
+  "depth_analysis": [
+    {
+      "max_depth": 3,
+      "actual_depth": 3,
+      "n_leaves": 8,
+      "train_acc": 0.7922848664688428,
+      "test_acc": 0.6235294117647059,
+      "test_f1": 0.6363636363636364,
+      "test_roc_auc": 0.6630434782608695,
+      "overfit_gap": 0.1687554547041369
+    },
+    {
+      "max_depth": 4,
+      "actual_depth": 4,
+      "n_leaves": 14,
+      "train_acc": 0.827893175074184,
+      "test_acc": 0.5411764705882353,
+      "test_f1": 0.6486486486486487,
+      "test_roc_auc": 0.6045150501672241,
+      "overfit_gap": 0.28671670448594877
+    },
+    {
+      "max_depth": 5,
+      "actual_depth": 5,
+      "n_leaves": 22,
+      "train_acc": 0.8694362017804155,
+      "test_acc": 0.5764705882352941,
+      "test_f1": 0.6086956521739131,
+      "test_roc_auc": 0.600613154960981,
+      "overfit_gap": 0.2929656135451214
+    },
+    {
+      "max_depth": 6,
+      "actual_depth": 6,
+      "n_leaves": 31,
+      "train_acc": 0.9287833827893175,
+      "test_acc": 0.611764705882353,
+      "test_f1": 0.6206896551724138,
+      "test_roc_auc": 0.5585284280936454,
+      "overfit_gap": 0.3170186769069645
+    },
+    {
+      "max_depth": 7,
+      "actual_depth": 7,
+      "n_leaves": 41,
+      "train_acc": 0.9614243323442137,
+      "test_acc": 0.611764705882353,
+      "test_f1": 0.6373626373626373,
+      "test_roc_auc": 0.6086956521739131,
+      "overfit_gap": 0.34965962646186066
+    },
+    {
+      "max_depth": 8,
+      "actual_depth": 8,
+      "n_leaves": 46,
+      "train_acc": 0.9762611275964391,
+      "test_acc": 0.5176470588235295,
+      "test_f1": 0.5773195876288659,
+      "test_roc_auc": 0.5100334448160535,
+      "overfit_gap": 0.45861406877290967
+    },
+    {
+      "max_depth": 10,
+      "actual_depth": 10,
+      "n_leaves": 58,
+      "train_acc": 0.9940652818991098,
+      "test_acc": 0.5176470588235295,
+      "test_f1": 0.5773195876288659,
+      "test_roc_auc": 0.5139353400222966,
+      "overfit_gap": 0.47641822307558035
+    },
+    {
+      "max_depth": 12,
+      "actual_depth": 12,
+      "n_leaves": 61,
+      "train_acc": 1.0,
+      "test_acc": 0.5647058823529412,
+      "test_f1": 0.6262626262626263,
+      "test_roc_auc": 0.5549052396878484,
+      "overfit_gap": 0.43529411764705883
+    },
+    {
+      "max_depth": 15,
+      "actual_depth": 12,
+      "n_leaves": 61,
+      "train_acc": 1.0,
+      "test_acc": 0.5647058823529412,
+      "test_f1": 0.6262626262626263,
+      "test_roc_auc": 0.5549052396878484,
+      "overfit_gap": 0.43529411764705883
+    },
+    {
+      "max_depth": 20,
+      "actual_depth": 12,
+      "n_leaves": 61,
+      "train_acc": 1.0,
+      "test_acc": 0.5647058823529412,
+      "test_f1": 0.6262626262626263,
+      "test_roc_auc": 0.5549052396878484,
+      "overfit_gap": 0.43529411764705883
+    },
+    {
+      "max_depth": "None",
+      "actual_depth": 12,
+      "n_leaves": 61,
+      "train_acc": 1.0,
+      "test_acc": 0.5647058823529412,
+      "test_f1": 0.6262626262626263,
+      "test_roc_auc": 0.5549052396878484,
+      "overfit_gap": 0.43529411764705883
+    }
+  ]
+}

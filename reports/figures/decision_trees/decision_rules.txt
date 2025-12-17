@@ -1,0 +1,10 @@
+|--- agg_vwap_deviation <= 0.00
+|   |--- agg_vwap_deviation <= -0.00
+|   |   |--- class: 0
+|   |--- agg_vwap_deviation >  -0.00
+|   |   |--- class: 0
+|--- agg_vwap_deviation >  0.00
+|   |--- agg_vwap_deviation <= 0.00
+|   |   |--- class: 1
+|   |--- agg_vwap_deviation >  0.00
+|   |   |--- class: 1
