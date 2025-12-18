@@ -5,7 +5,7 @@
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![Jupyter](https://img.shields.io/badge/jupyter-notebook-orange.svg?logo=jupyter)
 
-# Order Book Microstructure Analysis
+# HFT-Equity-Prediction-Pipeline
 
 > **End-to-End Equity Microstructure Pipeline: Feature Engineering, Regime Detection & Tree-Based Prediction**
 

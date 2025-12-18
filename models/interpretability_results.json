@@ -11,7 +11,7 @@
   },
   "calibration": {
     "decision_tree_brier": 0.24920497144645992,
-    "random_forest_brier": 0.22233233021526413,
+    "random_forest_brier": 0.2223323302152641,
     "gradient_boosting_brier": 0.21875220023408265
   },
   "confidence_analysis": {

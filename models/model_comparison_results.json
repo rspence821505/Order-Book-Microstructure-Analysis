@@ -51,9 +51,9 @@
   },
   "latencies_us": {
     "Logistic Regression": 15,
-    "Decision Tree": 49.421199946664274,
-    "Random Forest": 27294.70859922003,
-    "Gradient Boosting": 169.84129979391582
+    "Decision Tree": 48.420799976156566,
+    "Random Forest": 27266.791999863926,
+    "Gradient Boosting": 170.71309957827907
   },
   "statistical_significance": [
     {
@@ -89,13 +89,13 @@
     },
     "Medium-Latency Trading (100-500\u03bcs)": {
       "recommended": "Random Forest",
-      "reason": "Best accuracy-speed balance (~27295\u03bcs, 0.630 accuracy)",
+      "reason": "Best accuracy-speed balance (~27267\u03bcs, 0.630 accuracy)",
       "tradeoff": "Requires batch retraining, less interpretable than Decision Tree"
     },
     "Latency-Tolerant (>500\u03bcs)": {
       "recommended": "Gradient Boosting",
       "reason": "Highest accuracy (0.645), best F1 score (0.647)",
-      "tradeoff": "Slower inference (~170\u03bcs), sequential evaluation"
+      "tradeoff": "Slower inference (~171\u03bcs), sequential evaluation"
     },
     "Regulatory/Compliance": {
       "recommended": "Decision Tree or Logistic Regression",
