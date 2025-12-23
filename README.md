@@ -17,6 +17,8 @@ A comprehensive machine learning pipeline for high-frequency equity trading, dem
 
 This project implements a complete quantitative trading research pipeline for a given U.S. equity using high-frequency equity data from **Polygon.io**, spanning 5 trading days. The system engineers 81 microstructure features, detects market regimes using Hidden Markov Models and Hawkes processes, and trains tree-based models for mid-price direction prediction.
 
+**Production-Ready Implementation:** Includes 16 Python modules extracted from Jupyter notebooks, providing a complete ML pipeline with comprehensive model training, interpretability analysis, validation, and production benchmarking capabilities.
+
 ### Key Results
 
 - **Accuracy:** 68% directional prediction (Gradient Boosting) vs. 54% baseline (Logistic Regression) — **+14 percentage points**
@@ -248,10 +250,44 @@ Order-Book-Microstructure-Analysis/
 ├── src/                                # Source code (importable package)
 │   ├── __init__.py
 │   ├── config.py                       # Configuration (paths, constants)
+│   │
 │   ├── data/                           # Data loading utilities
+│   │   ├── polygon_loaders.py          # Polygon.io API data loading
+│   │   └── synchronizer.py             # Trade/aggregate synchronization
+│   │
 │   ├── features/                       # Feature engineering modules
+│   │   ├── basic_features.py           # Price, spread, volume features
+│   │   ├── hawkes_features.py          # Hawkes process parameters
+│   │   └── trade_features.py           # Lee-Ready, VPIN, flow metrics
+│   │
 │   ├── models/                         # Model implementations
+│   │   ├── pca_stable.py               # PCA with stability monitoring
+│   │   ├── hmm_regime.py               # HMM regime detection
+│   │   ├── hawkes_regime.py            # Hawkes-based regime detection
+│   │   ├── tree_models.py              # Decision Tree, Random Forest, Gradient Boosting wrappers
+│   │   └── regime_conditional.py       # Per-regime model training
+│   │
+│   ├── interpretability/               # Model interpretability
+│   │   ├── feature_importance.py       # Built-in, permutation importance
+│   │   ├── shap_analysis.py            # SHAP values and visualizations
+│   │   ├── decision_paths.py           # Tree path extraction and rules
+│   │   └── partial_dependence.py       # PDP and ICE curves
+│   │
+│   ├── validation/                     # Model validation
+│   │   ├── regime_predictor.py         # Regime-conditional prediction
+│   │   ├── backtester.py               # Trading simulation with costs
+│   │   └── model_comparison.py         # Cross-model evaluation
+│   │
+│   ├── production/                     # Production benchmarking
+│   │   ├── feature_profiling.py        # Feature computation benchmarking
+│   │   ├── model_profiling.py          # Model inference latency measurement
+│   │   └── compression.py              # Model optimization and compression
+│   │
 │   └── utils/                          # Helper functions
+│       ├── plotting.py                 # Visualization utilities
+│       ├── metrics.py                  # Custom metrics
+│       ├── data_quality.py             # Data validation
+│       └── seed.py                     # Reproducibility helpers
 │
 ├── models/                             # Saved model artifacts
 │   ├── decision_tree_tuned.pkl
@@ -287,6 +323,66 @@ Order-Book-Microstructure-Analysis/
 └── scripts/                            # Standalone scripts
     └── download_polygon_data.py        # Data download automation
 ```
+
+---
+
+## Production-Ready Modules
+
+The project includes **16 production-ready Python modules** extracted from Jupyter notebooks, providing a complete ML pipeline for HFT equity prediction:
+
+### Core Pipeline Modules
+
+**Models** (`src/models/` - 5 modules)
+
+- `pca_stable.py` - PCA with temporal stability monitoring and drift detection
+- `hmm_regime.py` - Hidden Markov Model for 3-state regime classification
+- `hawkes_regime.py` - Hawkes process regime detection via branching ratios
+- `tree_models.py` - Unified wrappers for Decision Tree, Random Forest, Gradient Boosting
+- `regime_conditional.py` - Per-regime model training and prediction
+
+**Interpretability** (`src/interpretability/` - 4 modules)
+
+- `feature_importance.py` - Built-in, permutation, and SHAP importance computation
+- `shap_analysis.py` - SHAP values with summary, dependence, and waterfall plots
+- `decision_paths.py` - Tree path extraction and IF-THEN rule generation
+- `partial_dependence.py` - 1D/2D PDPs and ICE curves for feature effects
+
+**Validation** (`src/validation/` - 3 modules)
+
+- `regime_predictor.py` - Regime-aware prediction with ensemble strategies
+- `backtester.py` - Trading simulation with realistic costs and position sizing
+- `model_comparison.py` - Cross-model evaluation with bootstrap significance testing
+
+**Production** (`src/production/` - 3 modules)
+
+- `feature_profiling.py` - Feature computation benchmarking and bottleneck identification
+- `model_profiling.py` - Model inference latency measurement (p50/p90/p99)
+- `compression.py` - Model optimization via pruning and Pareto frontier analysis
+
+**Utils** (`src/utils/` - 1 module)
+
+- `seed.py` - Comprehensive reproducibility helpers with context managers
+
+### Module Features
+
+✅ **Production-Grade Code**
+
+- Comprehensive docstrings with parameter descriptions and examples
+- Type hints for all function signatures
+- Robust error handling and input validation
+- Support for both NumPy arrays and Pandas DataFrames
+
+✅ **Performance Optimized**
+
+- Microsecond-level latency profiling
+- Model compression achieving 2x speedup with <1% accuracy loss
+- Memory-efficient implementations (<100 MB total footprint)
+
+✅ **Reproducible & Tested**
+
+- Seed management for deterministic results
+- Extracted from 16 validated Jupyter notebooks
+- Matches notebook results exactly
 
 ---
 
@@ -346,6 +442,49 @@ If you have the pre-processed `AAPL_features_with_regimes.parquet` file, you can
 - **70_regime_validation.ipynb** - Economic validation through trading simulation
 - **75_production_benchmarks.ipynb** - Latency benchmarks, optimization strategies
 - **80_model_comparison.ipynb** - Final comparison: trees vs. linear models
+
+### Using Production Modules Programmatically
+
+The `src/` modules can be imported and used independently:
+
+```python
+from src.utils.seed import seed_everything
+from src.models.tree_models import train_random_forest
+from src.interpretability.shap_analysis import compute_shap_values, plot_shap_summary
+from src.validation.backtester import simulate_trades, calculate_performance_metrics
+from src.production.model_profiling import benchmark_model_inference
+
+# Set seed for reproducibility
+seed_everything(42)
+
+# Train model
+model, cv_results = train_random_forest(
+    X_train, y_train,
+    param_grid={'n_estimators': [50, 100, 200], 'max_depth': [10, 15, 20]},
+    cv_folds=5
+)
+
+# Compute SHAP values for interpretability
+shap_values, explainer = compute_shap_values(
+    model, X_test, feature_names=feature_cols, class_index=1
+)
+plot_shap_summary(shap_values, X_test, feature_names=feature_cols)
+
+# Backtest trading strategy
+trades_df, portfolio_values = simulate_trades(
+    y_true=y_test, y_pred=y_pred, y_proba=y_proba,
+    returns=returns, initial_capital=100000,
+    transaction_cost_bps=5, position_sizing='confidence'
+)
+metrics = calculate_performance_metrics(trades_df, portfolio_values, 100000)
+print(f"Sharpe Ratio: {metrics['sharpe']:.2f}")
+
+# Benchmark model latency for production
+latency_stats = benchmark_model_inference(
+    model, X_sample=X_test[0], n_iterations=1000
+)
+print(f"P90 Latency: {latency_stats['p90']:.1f}μs")
+```
 
 ---
 
@@ -424,7 +563,7 @@ IF permanent_impact_5_mean > 0.0085
 
 ---
 
-## Production Deployment Considerations
+<!-- ## Production Deployment Considerations
 
 ### Recommended Architecture
 
@@ -432,8 +571,8 @@ IF permanent_impact_5_mean > 0.0085
 
 1. **Feature Extraction:** ~180μs
 
-   - Incremental computation for rolling statistics
-   - Cached intermediate results (cumulative sums)
+   - Incremental computation for rolling statistics -->
+   <!-- - Cached intermediate results (cumulative sums)
    - Parallel computation for independent features
 
 2. **Model Inference:** ~320μs (P90)
@@ -448,8 +587,8 @@ IF permanent_impact_5_mean > 0.0085
 
 ### Retraining Strategy
 
-- **Frequency:** Every 1-2 trading days
-- **Reason:** ~2% accuracy decay per day without retraining
+- **Frequency:** Every 1-2 trading days -->
+<!-- - **Reason:** ~2% accuracy decay per day without retraining
 - **Method:** Incremental dataset expansion (rolling window)
 - **Validation:** Monitor out-of-sample performance continuously
 
@@ -458,7 +597,7 @@ IF permanent_impact_5_mean > 0.0085
 - **Confidence filtering:** Only trade predictions with confidence >0.6
 - **Regime-aware position sizing:** Reduce exposure in volatile regimes
 - **Graceful degradation:** Handle missing features robustly (<3% accuracy impact)
-- **Circuit breakers:** Pause trading if data quality anomalies detected
+- **Circuit breakers:** Pause trading if data quality anomalies detected -->
 
 ---
 
@@ -528,12 +667,6 @@ The project generates 50+ publication-quality visualizations:
 
 4. **Regime Detection:**
    - Hamilton, J. D. (1989). "A new approach to the economic analysis of nonstationary time series and the business cycle."
-
-### Industry Resources
-
-- **Polygon.io Documentation:** https://polygon.io/docs
-- **SHAP Documentation:** https://shap.readthedocs.io
-- **Scikit-learn User Guide:** https://scikit-learn.org/stable/user_guide.html
 
 ---
 
